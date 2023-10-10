@@ -57,7 +57,7 @@ const SEO = (props: SEOProps) => {
         },
         {
           rel: "apple-touch-icon",
-          href: favicon || "",
+          href: "https://demo-fnb.t-solution.vn/media/original_images/fnb-logo.png" || "",
         },
       ]}
       {...defaultNextSeo}
