@@ -53,7 +53,7 @@ const SEO = (props: SEOProps) => {
       additionalLinkTags={[
         {
           rel: "icon",
-          href: favicon || "",
+          href: "https://demo-fnb.t-solution.vn/media/original_images/fnb-logo.png" || "",
         },
         {
           rel: "apple-touch-icon",
