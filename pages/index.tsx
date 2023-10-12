@@ -39,6 +39,8 @@ export async function getStaticProps(context: GetStaticPropsContext) {
         initData: resList,
         fallback,
       },
+
+      revalidate:500
     };
   } catch (err) {
     return {
