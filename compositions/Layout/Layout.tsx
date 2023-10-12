@@ -1,12 +1,14 @@
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
 import { StackProps, styled } from "@mui/material";
 
 import Header from "./Header";
 import Footer from "./Footer";
 import Navigation from "./Navigation";
+import BackToTop from "@/components/BackToTop/BackToTop";
+import ContactSocial from "@/components/BackToTop/ContactSocial";
 
 import { useCart } from "@/hooks";
+import { useRouter } from "next/router";
 import { Box, LoadingPage, Stack } from "@/components";
 
 const ModalExport = dynamic(import("../Modal/ModalExport"), {
@@ -27,6 +29,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* <LoadingPage /> */}
       <Header />
       <Navigation />
+      <ContactSocial />
+      <BackToTop />
       <MainContent className="main-content">{children}</MainContent>
       <Footer />
     </MainPage>
@@ -58,6 +62,6 @@ const MainContent = styled(Box)(() => {
   return {
     flexGrow: 1,
     overflow: "hidden",
-    padding: "9.5rem 0 1rem 0",
+    padding: "11.5rem 0 1rem 0",
   };
 });

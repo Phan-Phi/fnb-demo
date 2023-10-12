@@ -10,7 +10,7 @@ type LoadingButtonProps = {
 };
 
 export default function LoadingButton(props: LoadingButtonProps) {
-  const { loading, buttonProps, title = "Gửi thông tin" } = props;
+  const { loading, buttonProps, title = "button.submit" } = props;
 
   const { messages } = useIntl();
 
@@ -21,7 +21,7 @@ export default function LoadingButton(props: LoadingButtonProps) {
           {messages["button.processing"]}...
         </StyledLoading>
       ) : (
-        <StyledButton {...buttonProps}>{title}</StyledButton>
+        <StyledButton {...buttonProps}>{messages[`${title}`]}</StyledButton>
       )}
     </Fragment>
   );

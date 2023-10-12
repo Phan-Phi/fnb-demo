@@ -11,7 +11,7 @@ export interface PRODUCT_PAGE_TYPE_ITEM_TYPE {
   last_published_at: string;
   is_exported: boolean;
   images: Image[];
-  unit: string;
+  unit: Unit;
   tiktok_url: string;
   description: Description[];
   first_variant_price: string;
@@ -32,7 +32,7 @@ interface Image {
 }
 type ImageBlockType = "image";
 interface ItemMeta {
-  type: FluffyType;
+  type: Type;
   detail_url: string;
   html_url: string | null;
   slug: string;
@@ -40,25 +40,25 @@ interface ItemMeta {
   seo_title: string;
   search_description: string;
   first_published_at: string;
-  alias_of: string | null;
+  alias_of: Parent | null;
   parent: Parent;
   locale: Locale;
   canonical_url: string;
   og_image: string | null;
 }
-type Locale = "vi" | "en";
 interface Parent {
   id: number;
   meta: ParentMeta;
   title: string;
 }
 interface ParentMeta {
-  type: PurpleType;
+  type: Type;
   detail_url: string;
   html_url: string | null;
 }
-type PurpleType = "product.ProductCategoryDetailPage";
-type FluffyType = "product.ProductPage";
+type Type = "product.ProductPage" | "product.ProductCategoryDetailPage";
+type Locale = "vi" | "en";
+type Unit = "" | "Đơn vị tính";
 interface TopLevelMeta {
   total_count: number;
 }

@@ -68,7 +68,7 @@ export default function ContactInfo() {
   return (
     <Stack gap="8px">
       <StyledStack>
-        <PhoneIcon />
+        <StyledPhoneIcon />
 
         <StyledWrapperHotlines divider={<StyledLine />}>
           {renderHotlines}
@@ -76,19 +76,19 @@ export default function ContactInfo() {
       </StyledStack>
 
       <StyledStack>
-        <EmailIcon />
+        <StyledEmailIcon />
 
         {renderEmails}
       </StyledStack>
 
       <StyledStack>
-        <AddressIcon />
+        <StyledAddressIcon />
 
         <StyledText>{router.locale === "vi" ? address : addressEn}</StyledText>
       </StyledStack>
 
       <StyledStack>
-        <TimeIcon />
+        <StyledTimeIcon />
 
         <Box>{renderWorkingTimes}</Box>
       </StyledStack>
@@ -99,14 +99,14 @@ export default function ContactInfo() {
 const StyledText = styled(Typography)(({ theme }) => {
   return {
     ...theme.typography.p_medium,
-    color: theme.palette.common.black,
+    color: theme.palette.text.primary,
   };
 });
 
 const StyledLink = styled(Link)(({ theme }) => {
   return {
     ...theme.typography.p_medium,
-    color: theme.palette.common.black,
+    color: theme.palette.text.primary,
   };
 });
 
@@ -134,5 +134,33 @@ const StyledLine = styled(Box)(({ theme }) => {
     // top: -5,
     position: "relative",
     backgroundColor: theme.palette.text.primary,
+  };
+});
+
+const StyledPhoneIcon = styled(PhoneIcon)(({ theme }) => {
+  return {
+    fill: "transparent",
+    stroke: theme.palette.text.primary,
+  };
+});
+
+const StyledEmailIcon = styled(EmailIcon)(({ theme }) => {
+  return {
+    fill: "transparent",
+    stroke: theme.palette.text.primary,
+  };
+});
+
+const StyledAddressIcon = styled(AddressIcon)(({ theme }) => {
+  return {
+    fill: "transparent",
+    stroke: theme.palette.text.primary,
+  };
+});
+
+const StyledTimeIcon = styled(TimeIcon)(({ theme }) => {
+  return {
+    fill: "transparent",
+    stroke: theme.palette.text.primary,
   };
 });

@@ -12,20 +12,27 @@ export interface ABOUT_PAGE_TYPE_ITEM_TYPE {
   subtitle: string;
   banner: string | null;
   histories: History[];
+  vision_title: string;
+  vision_description: string;
   certificate_title: string;
-  certificate_subtitle: string;
+  certificate_description: string;
   local_certificates: LocalCertificate[];
   export_certificates: any[];
 }
 interface History {
   block_type: string;
-  value: string;
+  value: ValueValue | string;
+}
+interface ValueValue {
+  width: string;
+  height: string;
+  src: string;
 }
 interface LocalCertificate {
   block_type: string;
-  value: Value;
+  value: LocalCertificateValue;
 }
-interface Value {
+interface LocalCertificateValue {
   title: string;
   image: string;
 }

@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { get } from "lodash";
 import { Box, Container, Grid, styled } from "@mui/material";
 
-import { Banner, SEO } from "@/components";
+import { Banner, Link, SEO } from "@/components";
 import Carousel from "./components/Carousel";
 import ProductInfo from "./components/ProductInfo";
 import ProductRelated from "./components/ProductRelated";
@@ -13,16 +13,19 @@ import BreadcrumbsProduct from "./components/BreadcrumbsProduct";
 import { IPage } from "@/interfaces";
 import { URL_DEFAULT_IMAGE } from "@/constants";
 import { getSeoObject, transformUrl } from "@/libs";
-import { useCart, useFetch, useFindCategory, useParams } from "@/hooks";
+import { useCart, useFetch, useFindCategory, useIntl, useParams } from "@/hooks";
 
 import {
   PAGE_TYPES,
   PAGES_END_POINT,
   PRODUCTS_VARIANTS,
   PRODUCT_PAGE_TYPE_ITEM_TYPE,
+  PRODUCT_CATEGORY_LISTING_PAGE_TYPE,
 } from "@/__generated__";
 
-export type ProductDetailProps = IPage<[PRODUCT_PAGE_TYPE_ITEM_TYPE, PRODUCTS_VARIANTS]>;
+export type ProductDetailProps = IPage<
+  [PRODUCT_PAGE_TYPE_ITEM_TYPE, PRODUCTS_VARIANTS, PRODUCT_CATEGORY_LISTING_PAGE_TYPE]
+>;
 
 export type IMAGES_TYPE = {
   block_type: string;
@@ -32,17 +35,22 @@ export type IMAGES_TYPE = {
 
 export default function ProductDetail(props: ProductDetailProps) {
   const router = useRouter();
+  const { messages } = useIntl();
   const { isExported } = useCart();
   const productData = get(props, "initData[0]");
-  const meta = get(productData, "meta");
   const productVariantData = get(props, "initData[1].items");
+  const categoryListData = get(props, "initData[2].items[0]");
 
+  const detailBanner = get(categoryListData, "detail_banner");
+  const detailBannerLink = get(categoryListData, "detail_banner_link");
+
+  const meta = get(productData, "meta");
   const productId = get(productData, "id").toString();
   const parentId = get(productData, "meta.parent.id").toString();
   const { categoryData } = useFindCategory(productId);
   const arr: any = [
     {
-      title: "Sản phẩm",
+      title: messages["product"],
       href: "/category",
     },
     ...categoryData,
@@ -57,11 +65,10 @@ export default function ProductDetail(props: ProductDetailProps) {
 
   const [variantId, setVariantId] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
-  const [isAnimation, setIsAnimation] = useState(true);
 
   const { params, setParams } = useParams({
     initState: {
-      limit: 10,
+      limit: 11,
       offset: 0,
       fields: "*",
       locale: router.locale,
@@ -143,8 +150,6 @@ export default function ProductDetail(props: ProductDetailProps) {
       setParams({
         offset: (page - 1) * params.limit,
       });
-
-      setIsAnimation((prev) => !!prev);
     },
     [params]
   );
@@ -160,9 +165,11 @@ export default function ProductDetail(props: ProductDetailProps) {
           <Grid item xs={12}>
             <BreadcrumbsProduct arrayBreadcrumbs={arr} />
           </Grid>
+
           <Grid item xs={5}>
             <Carousel imageData={images} refCarousel={refCarousel} />
           </Grid>
+
           <Grid item xs={7}>
             <ProductInfo
               setVariantId={setVariantId}
@@ -175,14 +182,13 @@ export default function ProductDetail(props: ProductDetailProps) {
             <ProductRelated
               data={data}
               isLoading={isLoading}
-              handlePagination={handlePagination}
               totalPage={totalPage}
-              isAnimation={isAnimation}
+              handlePagination={handlePagination}
             />
           </Grid>
 
           <Grid item xs={12}>
-            <Banner imgSrc={URL_DEFAULT_IMAGE} />
+            <Banner imgSrc={detailBanner} href={detailBannerLink || ""} />
           </Grid>
         </Grid>
       </StyledWrapper>

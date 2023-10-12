@@ -1,28 +1,44 @@
 import { isEmpty } from "lodash";
+import { useMeasure } from "react-use";
+import { BoxProps, Container, Grid, Grow, styled } from "@mui/material";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 
 import { transformUrl } from "@/libs";
-import { useRouter } from "next/router";
-import { useFetch, useIntl, useParams } from "@/hooks";
-import { Grid, Grow, styled } from "@mui/material";
-import { PAGES_END_POINT, PAGE_TYPES } from "@/__generated__";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Box, LoadingProducts, Pagination, Stack } from "@/components";
+import { PAGES_END_POINT } from "@/__generated__";
+import { useFetch, useIntl, useMedia, useParams } from "@/hooks";
+import { Box, LoadingProductsSlider, Pagination, Stack } from "@/components";
 
 import CardProductItem from "../CardProduct/CardProductItem";
+import WrapperContent from "@/containers/Home/components/WrapperContent";
 
 interface Props {
-  option?: object;
+  title: string;
+  option?: any;
 }
 
-export default function ProductSlider({ option }: Props) {
+interface WrapperProductItemProps extends BoxProps {
+  heightBox: number;
+}
+
+export default function ProductSlider({ option, title }: Props) {
+  const { isMdDown } = useMedia();
   const { messages } = useIntl();
-  const { locale } = useRouter();
-  const [checked, setChecked] = useState(true);
+  const [ref, { height }] = useMeasure<HTMLDivElement>();
+
   const [totalPage, setTotalPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { params, setParams } = useParams({
     initState: option,
-    excludeKeys: ["type", "locale", "fields", "limit", "offset"],
+    excludeKeys: [
+      "type",
+      "locale",
+      "fields",
+      "limit",
+      "offset",
+      "is_exported",
+      "descendant_of",
+    ],
   });
 
   const { data, isLoading, changeKey, resData } = useFetch<any>(
@@ -30,28 +46,38 @@ export default function ProductSlider({ option }: Props) {
   );
 
   useEffect(() => {
-    changeKey(transformUrl(PAGES_END_POINT, params));
-  }, [params]);
-
-  useEffect(() => {
     if (resData == undefined) return;
 
     setTotalPage(Math.ceil(resData?.meta.total_count / 10));
   }, [resData]);
 
-  const handlePagination = useCallback((event: React.SyntheticEvent, page: number) => {
-    setParams({
-      offset: (page - 1) * params.limit,
-    });
-    setChecked((prev) => !!prev);
-  }, []);
+  useEffect(() => {
+    setParams({ ...option });
+    setTotalPage(0);
+    setCurrentPage(1);
+  }, [option]);
+
+  useEffect(() => {
+    changeKey(transformUrl(PAGES_END_POINT, params));
+  }, [params]);
+
+  const handlePagination = useCallback(
+    (event: React.SyntheticEvent, page: number) => {
+      setCurrentPage(page);
+
+      setParams({
+        offset: (page - 1) * params.limit,
+      });
+    },
+    [params.limit]
+  );
 
   const renderItem = useMemo(() => {
     const LoadingComponent = (
-      <>
-        <LoadingProducts isHomePage />
-        <LoadingProducts isHomePage />
-      </>
+      <Box>
+        <LoadingProductsSlider isHomePage />
+        <LoadingProductsSlider isHomePage />
+      </Box>
     );
 
     let content: React.ReactNode = null;
@@ -65,11 +91,16 @@ export default function ProductSlider({ option }: Props) {
         content = LoadingComponent;
       } else {
         content = (
-          <Grid container columns={10} spacing={2}>
+          <Grid
+            container
+            columns={isMdDown ? 12 : 10}
+            spacing={2}
+            className="gridProductItem"
+          >
             {data.map((el, idx) => {
               return (
-                <Grid item xs={2} key={idx}>
-                  <Grow in={checked} timeout={idx * 70 + 600}>
+                <Grid item xs={4} md={2} key={idx} ref={ref}>
+                  <Grow in={true} timeout={idx * 70 + 600}>
                     <Box>
                       <CardProductItem
                         isHomePage
@@ -91,21 +122,49 @@ export default function ProductSlider({ option }: Props) {
     }
 
     return content;
-  }, [data, isLoading, checked]);
+  }, [data, isMdDown, isLoading]);
+
+  if (resData?.meta.total_count == undefined) return;
 
   return (
-    <Wrapper>
-      {renderItem}
+    <Fragment>
+      {resData?.meta.total_count > 0 && (
+        <Container>
+          <WrapperContent title={title}>
+            <Wrapper>
+              <WrapperProductItem heightBox={height}>{renderItem}</WrapperProductItem>
 
-      <Pagination count={totalPage} onchange={handlePagination} />
-    </Wrapper>
+              <Pagination
+                count={totalPage}
+                page={currentPage}
+                onchange={handlePagination}
+              />
+            </Wrapper>
+          </WrapperContent>
+        </Container>
+      )}
+    </Fragment>
   );
 }
 
-const Wrapper = styled(Box)(({ theme }) => {
+const Wrapper = styled(Box)(() => {
   return {
     "& .MuiPaginationItem-page, .MuiPaginationItem-ellipsis": {
       display: "none",
+    },
+  };
+});
+
+const WrapperProductItem = styled(Box, {
+  shouldForwardProp: (propName) => {
+    return propName !== "heightBox";
+  },
+})<WrapperProductItemProps>(({ heightBox }) => {
+  return {
+    marginBottom: "1.25rem",
+    height: heightBox * 2 + 32,
+    "& .gridProductItem": {
+      // height: 900,
     },
   };
 });

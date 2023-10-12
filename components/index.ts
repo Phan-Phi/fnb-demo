@@ -95,7 +95,9 @@ export { default as MuiFormHelperText } from "./MuiFormHelperText";
 // Loading
 export { default as LoadingPage } from "./LoadingPage";
 export { default as LoadingProducts } from "./Loading/LoadingProducts";
+export { default as LoadingProductsSlider } from "./Loading/LoadingProductsSlider";
 export { default as LoadingProductItem } from "./Loading/LoadingProductItem";
+export { default as LoadingProductSliderItem } from "./Loading/LoadingProducSlidertItem";
 export { default as LoadingCategoryItem } from "./Loading/LoadingCategoryItem";
 export { default as LoadingCategories } from "./Loading/LoadingCategories";
 export { default as NoProducts } from "./Loading/NoProducts";

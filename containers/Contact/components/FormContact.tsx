@@ -61,7 +61,7 @@ export default function FormContact() {
           name="name"
           control={control}
           render={(props) => {
-            return <FormControl label="Tên" controlState={props} />;
+            return <FormControl label={messages["form.name"]} controlState={props} />;
           }}
         />
 
@@ -70,7 +70,10 @@ export default function FormContact() {
           control={control}
           render={(props) => {
             return (
-              <FormControlForPhoneNumber controlState={props} label="Số Điện Thoại" />
+              <FormControlForPhoneNumber
+                controlState={props}
+                label={messages["form.phoneNumber"]}
+              />
             );
           }}
         />
@@ -108,7 +111,7 @@ export default function FormContact() {
             return (
               <FormControl
                 controlState={props}
-                label="Nội Dung"
+                label={messages["form.message"]}
                 InputProps={{
                   multiline: true,
                   rows: 8,

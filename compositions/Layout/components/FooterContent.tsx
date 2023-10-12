@@ -2,8 +2,9 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import { Grid, Typography, styled } from "@mui/material";
 
-import { transformUrl } from "@/libs";
 import HotlineItem from "./HotlineItem";
+
+import { transformUrl } from "@/libs";
 import { NAVBAR_ROUTES } from "@/routes";
 import { PAGES_API } from "@/apis";
 import { PAGE_TYPES } from "@/__generated__/END_POINT";
@@ -52,6 +53,8 @@ export default function FooterContent() {
     company_name,
     company_name_en,
     working_times,
+    ministry_link,
+    ministry_logo,
   } = setting;
 
   const renderPolicy = useMemo(() => {
@@ -102,12 +105,19 @@ export default function FooterContent() {
           <Text>{locale === "vi" ? footer_description : footer_description_en}</Text>
         </Box>
 
-        <Link href="http://online.gov.vn/Home/WebDetails/36254" target="_blank">
-          <ImageRatio
+        <Link href={ministry_link ? ministry_link : ""} target="_blank">
+          {/* <ImageRatio
             ratio="0"
-            imageProps={{ src: "/image/logo_bct_image.png" }}
+            imageProps={{ src: (ministry_logo ? ministry_logo : null) as any }}
             boxProps={{ width: "105px", height: "40px" }}
-          />
+          /> */}
+          {ministry_logo && (
+            <ImageRatio
+              ratio="0"
+              imageProps={{ src: ministry_logo as any }}
+              boxProps={{ width: "105px", height: "40px" }}
+            />
+          )}
         </Link>
 
         <CopyRight>© 2023 FNB. All rights reserved.</CopyRight>

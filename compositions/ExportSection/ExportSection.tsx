@@ -1,10 +1,10 @@
-import { Button, Typography, styled } from "@mui/material";
+import { useCallback } from "react";
+import { Button, Container, Typography, styled } from "@mui/material";
 
 import { HomePage } from "@/interfaces";
 import { useCart, useIntl, useMedia } from "@/hooks";
 import { Box, Ratio, Image, ButtonBase } from "@/components";
 import { EXPORT_SECTION_RATIO } from "@/constants";
-import { useCallback } from "react";
 
 type ExportSectionProps = {
   callback?: () => void;
@@ -21,21 +21,23 @@ export default function ExportSection({ data, callback }: ExportSectionProps) {
   }, [isExported]);
 
   return (
-    <Ratio ratio={isSmDown ? EXPORT_SECTION_RATIO.mobile : "1200/324"}>
-      <Overlay className="overlay" />
-      <Image
-        src={isExported ? data.local_image : data.export_image}
-        alt=""
-        style={{ objectFit: "cover" }}
-      />
+    <Container>
+      <Ratio ratio={isSmDown ? EXPORT_SECTION_RATIO.mobile : "1200/324"}>
+        <Overlay className="overlay" />
+        <Image
+          src={isExported ? data.local_image : data.export_image}
+          alt=""
+          style={{ objectFit: "cover", borderRadius: "1rem" }}
+        />
 
-      <Content>
-        <Text>{isExported ? data.local_cta : data.export_cta}</Text>
-        <StyledButton variant="contained" onClick={callback || handleExported}>
-          {messages["seeMore"]}
-        </StyledButton>
-      </Content>
-    </Ratio>
+        <Content>
+          <Text>{isExported ? data.local_cta : data.export_cta}</Text>
+          <StyledButton variant="contained" onClick={callback || handleExported}>
+            {messages["seeMore"]}
+          </StyledButton>
+        </Content>
+      </Ratio>
+    </Container>
   );
 }
 
@@ -65,6 +67,9 @@ const Text = styled(Typography)(({ theme }) => {
     width: "80%",
     margin: "0 auto",
     marginBottom: "1.25rem",
+    fontWeight: 700,
+    fontSize: "40px",
+    lineHeight: "48px",
     [theme.breakpoints.down("md")]: {
       fontSize: "24px",
       lineHeight: "38.4px",
@@ -83,5 +88,6 @@ const Overlay = styled(Box)(({ theme }) => {
     width: "100%",
     background: "rgba(0,0,0,0.4)",
     zIndex: 1,
+    borderRadius: "1rem",
   };
 });

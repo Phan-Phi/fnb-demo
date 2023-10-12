@@ -9,8 +9,8 @@ export interface NEWS_PAGE_TYPE_ITEM_TYPE {
   meta: ItemMeta;
   title: string;
   last_published_at: string;
-  banner: string | null;
-  thumbnail: string | null;
+  banner: null | string;
+  thumbnail: null | string;
   description: string;
   content: Content[];
   is_on_footer: boolean;

@@ -42,7 +42,9 @@ export default function CardCategoryItem(props: CardCategoryItemProps) {
 
       <StyledOverLay />
 
-      <StyledTitle>{title}</StyledTitle>
+      <StyledWrapperTitle>
+        <StyledTitle>{title}</StyledTitle>
+      </StyledWrapperTitle>
     </StyledWrapperCardCategoryItem>
   );
 }
@@ -58,19 +60,28 @@ const StyledWrapperCardCategoryItem = styled(Box, {
   };
 });
 
-const StyledTitle = styled(Typography)(({ theme }) => {
+const StyledWrapperTitle = styled(Box)(() => {
   return {
     zIndex: 3,
-    left: "50%",
-    bottom: "20%",
+    padding: "0 16px",
     position: "absolute",
-    transform: "translateX(-50%)",
+    bottom: "10%",
+    width: "100%",
+  };
+});
 
+const StyledTitle = styled(Typography)(({ theme }) => {
+  return {
     ...theme.typography.SVNPoppins,
 
     textAlign: "center",
     textTransform: "capitalize",
     color: theme.palette.common.white,
+    overflow: "hidden",
+    display: "-webkit-box",
+    WebkitBoxOrient: "vertical",
+    WebkitLineClamp: 2,
+    minHeight: 32 * 2,
   };
 });
 

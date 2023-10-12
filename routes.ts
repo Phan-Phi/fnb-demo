@@ -24,14 +24,14 @@ export const NAVBAR_ROUTES = [
     link: "/about",
   },
   {
+    key: "category",
+    name: "Sản Phẩm",
+    link: "/category",
+  },
+  {
     key: "news",
     name: "Tin Tức",
     link: "/news",
-  },
-  {
-    key: "product",
-    name: "Thương Hiệu",
-    link: "/category",
   },
   {
     key: "contact",

@@ -1,40 +1,67 @@
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import { useUpdateEffect } from "react-use";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { get, isEmpty } from "lodash";
 import { Box, Container, Grid, Grow, Stack, styled } from "@mui/material";
 
+import {
+  SEO,
+  Banner,
+  Spacing,
+  NoProducts,
+  Pagination,
+  LoadingProducts,
+} from "@/components";
 import Sort from "./components/Sort";
 import Categories from "./components/Categories";
 import { CardProductItem } from "@/compositions";
 import BreadcrumbsProduct from "./components/BreadcrumbsProduct";
-import { Banner, LoadingProducts, NoProducts, Pagination, SEO } from "@/components";
 
+import {
+  useCart,
+  useIntl,
+  useFetch,
+  useParams,
+  useGetParent,
+  useFindCategory,
+} from "@/hooks";
 import { IPage } from "@/interfaces";
 import { URL_DEFAULT_IMAGE } from "@/constants";
 import { getSeoObject, transformUrl } from "@/libs";
-import {
-  useCart,
-  useFetch,
-  useFindCategory,
-  useGetParent,
-  useIntl,
-  useParams,
-} from "@/hooks";
 
 import {
+  HOME_PAGE_TYPE,
   PRODUCT_PAGE_TYPE_ITEM_TYPE,
   PRODUCT_CATEGORY_LISTING_PAGE_TYPE,
 } from "@/__generated__";
 import { PAGES_END_POINT, PAGE_TYPES } from "@/__generated__/END_POINT";
 
-export type ProductListProps = IPage<[PRODUCT_CATEGORY_LISTING_PAGE_TYPE]>;
+const ExportSection = dynamic(import("@/compositions/ExportSection/ExportSection"), {
+  ssr: false,
+});
+
+export type ProductListProps = IPage<
+  [PRODUCT_CATEGORY_LISTING_PAGE_TYPE, HOME_PAGE_TYPE]
+>;
 
 export default function ProductList(props: ProductListProps) {
   const { messages } = useIntl();
   const meta = get(props, "initData[0].items[0].meta");
+  const homeData = get(props, "initData[1].items[0]");
 
-  const { isExported } = useCart();
+  const { export_cta, local_cta, local_image, export_image } = homeData;
+
+  const exportSectionData = {
+    export_cta,
+    local_cta,
+    local_image,
+    export_image,
+  };
+
+  const router = useRouter();
+  const { isExported, setIsExported } = useCart();
   const { parentData } = useGetParent();
   const parentId = get(parentData, "id") as string;
   const { categoryData } = useFindCategory(parentId);
@@ -49,14 +76,13 @@ export default function ProductList(props: ProductListProps) {
 
   const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isAnimation, setIsAnimation] = useState(true);
 
   const { params, setParams } = useParams({
     initState: {
-      limit: 16,
+      limit: 10,
       offset: 0,
       fields: "*",
-      locale: "vi",
+      locale: router.locale,
       type: PAGE_TYPES["PRODUCT_PRODUCTPAGE"],
       descendant_of: parentId,
       is_exported: isExported ? true : "false",
@@ -87,7 +113,7 @@ export default function ProductList(props: ProductListProps) {
     if (resData == undefined) return;
 
     const totalCount = resData.meta.total_count;
-    setTotalPage(Math.ceil(totalCount / 16));
+    setTotalPage(Math.ceil(totalCount / 10));
 
     // if (isMdDown) {
     //   setTotalPage(Math.ceil(totalCount / 6));
@@ -135,7 +161,7 @@ export default function ProductList(props: ProductListProps) {
             {dataProduct.map((item, index) => {
               return (
                 <Grid item xs={3} key={index}>
-                  <Grow in={isAnimation} timeout={index * 70 + 600}>
+                  <Grow in={true} timeout={index * 70 + 600}>
                     <Box>
                       <CardProductItem
                         title={item.title}
@@ -156,7 +182,27 @@ export default function ProductList(props: ProductListProps) {
     }
 
     return content;
-  }, [dataProduct, isLoading, isAnimation]);
+  }, [dataProduct, isLoading]);
+
+  const handleChangeExported = useCallback(() => {
+    if (isExported) {
+      setIsExported(false);
+      setParams({
+        is_exported: "false",
+        order: undefined,
+        offset: 0,
+      });
+    } else {
+      setIsExported(true);
+      setParams({
+        is_exported: true,
+        order: undefined,
+        offset: 0,
+      });
+    }
+    setCurrentPage(1);
+    document.body.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [isExported]);
 
   const handlePagination = useCallback(
     (event: React.SyntheticEvent, page: number) => {
@@ -167,20 +213,20 @@ export default function ProductList(props: ProductListProps) {
       setParams({
         offset: (page - 1) * params.limit,
       });
-
-      setIsAnimation((prev) => !!prev);
     },
     [params, currentPage]
   );
 
-  if (parentData == undefined) return null;
+  if (parentData == undefined || homeData == undefined) return null;
 
   return (
     <Container>
       <Stack gap="16px">
         <SEO {...getSeoObject(meta)} />
 
-        <BreadcrumbsProduct arrayBreadcrumbs={arr} />
+        <StyledWrapperBreadcrumbs>
+          <BreadcrumbsProduct arrayBreadcrumbs={arr} />
+        </StyledWrapperBreadcrumbs>
 
         <Banner
           imgSrc={parentData.banner || URL_DEFAULT_IMAGE}
@@ -203,15 +249,29 @@ export default function ProductList(props: ProductListProps) {
                 isDataEmpty={isEmpty(dataProduct)}
                 isLoading={!isLoading}
               >
-                <Pagination count={totalPage} onchange={handlePagination} />
+                <Pagination
+                  page={currentPage}
+                  count={totalPage}
+                  onchange={handlePagination}
+                />
               </StyledWrapperPagination>
             </Stack>
           </Grid>
         </Grid>
+
+        <Spacing spacing={2.5} />
+
+        <ExportSection data={exportSectionData} callback={handleChangeExported} />
       </Stack>
     </Container>
   );
 }
+
+const StyledWrapperBreadcrumbs = styled(Box)(() => {
+  return {
+    padding: "0 16px",
+  };
+});
 
 const StyledWrapperPagination = styled(Box, {
   shouldForwardProp: (propName) => propName !== "isDataEmpty" && propName !== "isLoading",
@@ -232,7 +292,6 @@ const StyledWrapperSort = styled(Stack, {
 })<{ isExported: boolean }>(({ isExported }) => {
   return {
     alignItems: "flex-end",
-
     display: isExported ? "none" : "flex",
   };
 });

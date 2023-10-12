@@ -1,21 +1,13 @@
 import classNames from "classnames";
-import { useRouter } from "next/router";
 import { useDebounce } from "react-use";
 import { Input, InputProps, Box, styled, BoxProps } from "@mui/material";
-import { useTypewriter } from "react-simple-typewriter";
+import { ChangeEvent, forwardRef, useCallback, useEffect, useRef, useState } from "react";
 
-import { useSetting } from "@/hooks";
 import { ROUTES } from "@/routes";
-import React, {
-  ChangeEvent,
-  forwardRef,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useRouter } from "next/router";
+import { useIntl, useSetting } from "@/hooks";
 import { SearchOutlined } from "@/components";
-import useThemeMode from "@/hooks/useThemeMode";
+import { COLOR_PALETTE } from "@/configuration";
 
 interface SearchInputProps extends Omit<InputProps, "onChange"> {
   onChange?: (value: string) => void;
@@ -46,6 +38,7 @@ const InputSearch = forwardRef<
   SearchInputProps
 >(function InputDemo(props: any, ref: any) {
   const setting = useSetting();
+  const { messages } = useIntl();
 
   const router = useRouter();
   const { locale } = router;
@@ -94,7 +87,7 @@ const InputSearch = forwardRef<
   );
 
   useEffect(() => {
-    ref.current.placeholder = "Tìm kiếm sản phẩm...";
+    ref.current.placeholder = messages["searchProduct"];
   }, []);
 
   return (
@@ -107,7 +100,7 @@ const InputSearch = forwardRef<
             // isBlack: !!y,
           },
         ])}
-        placeholder="Tìm kiếm sản phẩm..."
+        placeholder={messages["searchProduct"]}
         value={search}
         startAdornment={<StyledSearchOutlined onClick={onSearchKeywordHandler(search)} />}
         onChange={onValueChange}
@@ -119,7 +112,7 @@ const InputSearch = forwardRef<
 
 const StyledSearchOutlined = styled(SearchOutlined)(({ theme }) => {
   return {
-    color: theme.palette.text.primary,
+    color: COLOR_PALETTE["neutral-500"],
   };
 });
 
@@ -132,6 +125,18 @@ const Wrapper = styled(Box, {
 })<WrapperProps>(({ theme, active }) => {
   return {
     // width: "60%",
+
+    "& .search-input": {
+      gap: "0.8rem",
+      boxShadow:
+        theme.palette.mode === "dark"
+          ? "rgba(90, 88, 88, 0.2) 0px 2px 8px 0px"
+          : "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+      border: "none",
+      width: "23.5rem",
+      background: theme.palette.mode === "dark" ? theme.palette.background.paper : "none",
+    },
+
     "& .MuiInputBase-root": {
       "& .MuiInputBase-input": {
         color: theme.palette.mode === "light" ? "black !important" : "white !important",
@@ -139,15 +144,3 @@ const Wrapper = styled(Box, {
     },
   };
 });
-
-//   useImperativeHandle(
-//     ref,
-//     () => {
-//       return {
-//         resetValue: () => {
-//           setSearch("");
-//         },
-//       };
-//     },
-//     []
-//   );

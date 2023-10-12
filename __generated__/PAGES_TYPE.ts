@@ -19,27 +19,28 @@ interface ItemMeta {
   seo_title: string;
   search_description: string;
   first_published_at: string;
-  alias_of: string | null;
-  parent: Parent | null;
+  alias_of: AliasOf | null;
+  parent: AliasOf | null;
   locale: Locale;
 }
-type Locale = "vi" | "en";
-interface Parent {
+interface AliasOf {
   id: number;
-  meta: ParentMeta;
+  meta: AliasOfMeta;
   title: string;
 }
-interface ParentMeta {
+interface AliasOfMeta {
   type: Type;
   detail_url: string;
   html_url: string | null;
 }
 type Type =
+  | "product.ProductPage"
   | "home.HomePage"
   | "news.NewsCategoryListingPage"
   | "news.NewsCategoryDetailPage"
   | "product.ProductCategoryListingPage"
   | "product.ProductCategoryDetailPage";
+type Locale = "vi" | "en";
 interface TopLevelMeta {
   total_count: number;
 }

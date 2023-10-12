@@ -10,10 +10,10 @@ import CartItem from "./components/CartItem";
 import { NoProducts, SEO, Spacing, Title, VNDCurrency } from "@/components";
 
 import { ROUTES } from "@/routes";
+import { getSeoObject } from "@/libs";
 import { useCart, useIntl } from "@/hooks";
 import { CART_ITEM_TYPE } from "@/interfaces";
 import { CART_ITEMS, CART_ITEMS_END_POINT } from "@/__generated__";
-import { getSeoObject } from "@/libs";
 
 export interface CART_ITEMS_EXTENDS extends CART_ITEMS {
   items: CART_ITEM_TYPE[];
@@ -58,9 +58,9 @@ export default function Cart() {
           key={item.id}
           id={item.id}
           variantId={item.variant}
+          price={item.variant_price}
           variantName={item.variant_name}
           productName={item.product_title}
-          price={item.variant_price}
           quantityOfProduct={item.quantity}
           onDeleteItem={() => handleDeleteCartItem(item.id)}
         />
@@ -98,7 +98,7 @@ export default function Cart() {
                 router.push(`/${ROUTES.checkout}`);
               }}
             >
-              Tiếp tục
+              {messages["button.next"]}
             </StyledButton>
           </Stack>
         </Stack>

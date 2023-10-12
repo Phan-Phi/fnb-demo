@@ -5,8 +5,11 @@ import { Box, SEO } from "@/components";
 import { RenderContent } from "@/compositions";
 import { formatDate, getSeoObject } from "@/libs";
 import { IPage, responseSchema } from "@/interfaces";
+import { NEWS_PAGE_TYPE, NEWS_PAGE_TYPE_ITEM_TYPE } from "@/__generated__";
 
-export type NewsDetailPageProps = IPage<[any, responseSchema<any>]>;
+export type NewsDetailPageProps = IPage<
+  [NEWS_PAGE_TYPE_ITEM_TYPE, responseSchema<NEWS_PAGE_TYPE>]
+>;
 
 export default function NewsDetail(props: NewsDetailPageProps) {
   const newsDetailData = get(props, "initData[0]");
@@ -14,21 +17,28 @@ export default function NewsDetail(props: NewsDetailPageProps) {
   const { title, content, meta, last_published_at } = newsDetailData;
 
   return (
-    <Box>
+    <Wrapper>
       <SEO {...getSeoObject(meta)} />
 
       <StyledContainer>
-        <Ttile>{title}</Ttile>
-        <TimeNews>{formatDate(last_published_at, "dd.MM.yyyy")}</TimeNews>
+        <Title>{title}</Title>
+        <TimeNews>{formatDate(meta.first_published_at, "dd.MM.yyyy")}</TimeNews>
 
-        <Wrapper>
+        <WrapperContent>
           <RenderContent data={content} />
-        </Wrapper>
+        </WrapperContent>
       </StyledContainer>
-    </Box>
+    </Wrapper>
   );
 }
-const Ttile = styled(Typography)(({ theme }) => {
+
+const Wrapper = styled(Box)(({ theme }) => {
+  return {
+    padding: "0 1.25rem",
+  };
+});
+
+const Title = styled(Typography)(({ theme }) => {
   return {
     ...theme.typography.RobotoSlab_xSmall,
   };
@@ -42,7 +52,7 @@ const TimeNews = styled(Typography)(({ theme }) => {
   };
 });
 
-const Wrapper = styled(Box)(() => {
+const WrapperContent = styled(Box)(() => {
   return {
     margin: "80px 0",
   };

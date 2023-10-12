@@ -5,28 +5,30 @@ import { Box, Button, Stack, Typography, styled } from "@mui/material";
 import { ROUTES } from "@/routes";
 import { getSeoObject } from "@/libs";
 import { SEO, SuccessIcon } from "@/components";
+import { useIntl } from "@/hooks";
 
 export default function OrderSuccess() {
   const router = useRouter();
+  const { messages } = useIntl();
 
   return (
     <Stack gap="40px" alignItems="center" justifyContent="center">
       <SEO {...getSeoObject(undefined)} />
 
-      <StyledTitle>Đặt hàng thành công</StyledTitle>
+      <StyledTitle>{messages["order.placedSuccess"]}</StyledTitle>
 
       <WrapperIcon component="span" className="pulse">
         <SuccessIcon />
       </WrapperIcon>
 
-      <StyledDesc>Chúng tôi sẽ liên lạc để xử lý trong thời gian sớm nhất</StyledDesc>
+      <StyledDesc>{messages["order.success"]}</StyledDesc>
 
       <StyledButton
         onClick={() => {
           router.push(ROUTES.home);
         }}
       >
-        Trở về trang chủ
+        {messages["button.backHome"]}
       </StyledButton>
     </Stack>
   );
@@ -37,7 +39,7 @@ const StyledTitle = styled(Typography)(({ theme }) => {
     ...theme.typography.RobotoSlab_xSmall,
     letterSpacing: "-1.04px",
     textTransform: "capitalize",
-    color: theme.palette.common.black,
+    color: theme.palette.text.primary,
   };
 });
 
@@ -46,7 +48,7 @@ const StyledDesc = styled(Typography)(({ theme }) => {
     ...theme.typography.p_large,
     fontWeight: 600,
     letterSpacing: "-1.04px",
-    color: theme.palette.common.black,
+    color: theme.palette.text.primary,
   };
 });
 
@@ -58,17 +60,18 @@ const StyledButton = styled(Button)(({ theme }) => {
   };
 });
 
-const WrapperIcon = styled(Box)(() => {
+const WrapperIcon = styled(Box)(({ theme }) => {
   return {
     position: "relative",
-    border: "6px solid black",
+    border: "6px solid",
+    borderColor: theme.palette.text.primary,
     borderRadius: "100%",
     height: "6rem",
     width: "6rem",
     backgroundColor: "transparent",
     textAlign: "center",
     display: "block",
-    color: "black",
+    color: theme.palette.text.primary,
     boxShadow: "0 0 17px black",
     animation: "pulsate 1s ease-out infinite",
 

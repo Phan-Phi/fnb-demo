@@ -7,7 +7,11 @@ import prefetchData from "@/libs/prefetchData";
 import { ProductDetail } from "@/containers";
 import { ProductDetailProps } from "@/containers/Products/ProductDetail";
 
-import { PAGES_END_POINT, PRODUCTS_VARIANTS_END_POINT } from "@/__generated__";
+import {
+  PAGES_END_POINT,
+  PAGE_TYPES,
+  PRODUCTS_VARIANTS_END_POINT,
+} from "@/__generated__";
 
 export default function ProductDetailPage(props: ProductDetailProps) {
   return <ProductDetail {...props} />;
@@ -26,6 +30,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         fields: "*",
         locale,
         product: query.id,
+      }),
+      transformUrl(PAGES_END_POINT, {
+        fields: "*",
+        locale,
+        type: PAGE_TYPES["PRODUCT_PRODUCTCATEGORYLISTINGPAGE"],
       }),
     ];
 

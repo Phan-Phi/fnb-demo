@@ -196,12 +196,14 @@ export default function ProductInfo(props: ProductInfoProps) {
       </Stack>
 
       <Stack flexDirection="row" gap="8px">
-        <ButtonTiktok
-          onClick={() => {
-            if (tiktok_url == "") return;
-            window.open(tiktok_url, "_blank");
-          }}
-        />
+        {tiktok_url !== "" && (
+          <ButtonTiktok
+            onClick={() => {
+              window.open(tiktok_url, "_blank");
+            }}
+          />
+        )}
+
         <ButtonBuyNow
           loading={loading}
           isExported={is_exported}

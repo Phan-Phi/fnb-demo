@@ -132,7 +132,7 @@ export default function Checkout() {
     <Container>
       <SEO {...getSeoObject(undefined)} />
 
-      <Title>Thông Tin Giao Hàng</Title>
+      <Title>{messages["order.bannerSubTitle"]}</Title>
 
       <Spacing spacing={3} />
 
@@ -163,7 +163,7 @@ export default function Checkout() {
             </StyledCenter>
 
             <LoadingButton
-              title="Đặt Hàng"
+              title="order.bannerTitle"
               loading={loading}
               buttonProps={{
                 type: "submit",

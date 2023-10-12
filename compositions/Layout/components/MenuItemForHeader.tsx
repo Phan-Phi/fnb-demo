@@ -20,9 +20,9 @@ export default function MenuItemForHeader({ _active }: Props) {
   const { asPath, locale } = useRouter();
   const [active, setActive] = useState<boolean>(false);
 
-  const renderMeunuItem = useMemo(() => {
+  const renderMenuItem = useMemo(() => {
     return NAVBAR_ROUTES.map((el: any, idx: number) => {
-      if (el.key === "product") {
+      if (el.key === "category") {
         return (
           <StyledBox
             key={idx}
@@ -74,7 +74,7 @@ export default function MenuItemForHeader({ _active }: Props) {
     });
   }, [asPath, active, _active, locale]);
 
-  return <WrapperMenuHeader columnGap={2.5}>{renderMeunuItem}</WrapperMenuHeader>;
+  return <WrapperMenuHeader columnGap={2.5}>{renderMenuItem}</WrapperMenuHeader>;
 }
 
 const StyledBox = styled(Box)(({ theme }) => {
@@ -138,5 +138,7 @@ const TextMenuItem = styled(Typography, {
     color: activeMenu ? theme.palette.primary.main : theme.palette.text.primary,
     transition: "all .4s ease",
     fontWeight: 700,
+    fontSize: "19px",
+    lineHeight: "28px",
   };
 });

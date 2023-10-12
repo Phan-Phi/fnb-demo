@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useUpdateEffect } from "react-use";
 import { useEffect, useMemo, useState } from "react";
 
 import { useCart, useFetch } from ".";
@@ -16,22 +17,25 @@ type CATEGORY_ITEM_TYPE = {
   name: string;
   banner: string | null;
   products: any[];
+  on_homepage: boolean;
 };
 
 function useCheckCategory() {
   const router = useRouter();
   const { isExported } = useCart();
+
   const [categories, setCategories] = useState<CATEGORY_ITEM_TYPE[]>([]);
 
-  const { data: allProductData } = useFetch<PRODUCT_PAGE_TYPE_ITEM_TYPE>(
-    transformUrl(PAGES_END_POINT, {
-      locale: router.locale,
-      fields: "*",
-      limit: 10000,
-      type: PAGE_TYPES["PRODUCT_PRODUCTPAGE"],
-      is_exported: isExported ? true : "false",
-    })
-  );
+  const { data: allProductData, changeKey: changeKeyProduct } =
+    useFetch<PRODUCT_PAGE_TYPE_ITEM_TYPE>(
+      transformUrl(PAGES_END_POINT, {
+        locale: router.locale,
+        fields: "*",
+        limit: 10000,
+        type: PAGE_TYPES["PRODUCT_PRODUCTPAGE"],
+        is_exported: isExported ? true : "false",
+      })
+    );
 
   const { data: dataCategory, isLoading } =
     useFetch<PRODUCT_CATEGORY_DETAIL_PAGE_TYPE_ITEM_TYPE>(
@@ -43,17 +47,30 @@ function useCheckCategory() {
       })
     );
 
+  useUpdateEffect(() => {
+    changeKeyProduct(
+      transformUrl(PAGES_END_POINT, {
+        locale: router.locale,
+        fields: "*",
+        limit: 10000,
+        type: PAGE_TYPES["PRODUCT_PRODUCTPAGE"],
+        is_exported: isExported ? true : "false",
+      })
+    );
+  }, [isExported]);
+
   useEffect(() => {
     if (dataCategory == undefined || allProductData == undefined) return;
 
     const obj: CATEGORY_ITEM_TYPE[] = [];
 
-    dataCategory.map((item) => {
+    dataCategory.map((item: any) => {
       const category: CATEGORY_ITEM_TYPE = {
         id: item.id,
         name: item.title,
         banner: item.banner,
         products: [],
+        on_homepage: item.on_homepage,
       };
 
       obj.push(category);

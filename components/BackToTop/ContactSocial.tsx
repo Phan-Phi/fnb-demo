@@ -14,6 +14,8 @@ export default function ContactSocial() {
   const { contact_icon } = setting;
 
   const render = useMemo(() => {
+    if (contact_icon == undefined) return null;
+
     return contact_icon.map((el: any, idx: number) => {
       const { value, block_type } = el;
 
@@ -43,7 +45,7 @@ const Wrapper = styled(Box)(() => {
     position: "fixed",
     right: "1rem",
     bottom: 110,
-    zIndex: 1,
+    zIndex: 9999,
   };
 });
 

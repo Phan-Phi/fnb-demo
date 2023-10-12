@@ -19,11 +19,11 @@ defineMessages({
   },
   "header.news": {
     id: "header.news",
-    defaultMessage: "Tin Tức",
+    defaultMessage: "Blog",
   },
-  "header.product": {
-    id: "header.product",
-    defaultMessage: "Thương hiệu",
+  "header.category": {
+    id: "header.category",
+    defaultMessage: "Sản phẩm",
   },
   "header.languages": {
     id: "header.languages",
@@ -358,7 +358,7 @@ defineMessages({
   },
   "order.einvoiceInfor": {
     id: "order.einvoiceInfor",
-    defaultMessage: "Xuất VAT",
+    defaultMessage: "Thông tin xuất hóa đơn VAT",
   },
   "order.success": {
     id: "order.success",
@@ -384,6 +384,10 @@ defineMessages({
   "news.news&event": {
     id: "news.news&event",
     defaultMessage: "Tin Tức & Sự Kiện",
+  },
+  "news.noNewsFound": {
+    id: "news.noNewsFound",
+    defaultMessage: "Không có bài viết",
   },
 
   "pagination.previous": {
@@ -438,11 +442,31 @@ defineMessages({
 
   product: {
     id: "product",
-    defaultMessage: "Product",
+    defaultMessage: "Sản Phẩm",
+  },
+
+  "product.empty": {
+    id: "product.empty",
+    defaultMessage: "Danh mục hiện đang trống",
+  },
+
+  search: {
+    id: "search",
+    defaultMessage: "Tìm Kiếm",
+  },
+
+  searchProduct: {
+    id: "searchProduct",
+    defaultMessage: "Tìm kiếm sản phẩm...",
   },
 
   categories: {
     id: "categories",
-    defaultMessage: "Categories",
+    defaultMessage: "Danh Mục",
+  },
+
+  followUs: {
+    id: "followUs",
+    defaultMessage: "Theo Dõi",
   },
 });

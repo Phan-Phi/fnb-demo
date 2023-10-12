@@ -5,9 +5,9 @@ import HotlineItem from "./HotlineItem";
 import PhonePrimaryIcon from "@/components/Icon/PhonePrimaryIcon";
 import EmailPrimaryIcon from "@/components/Icon/EmailPrimaryIcon";
 
+import { useIntl } from "@/hooks";
 import { DEFAULT_NAME_TYPE } from "@/__generated__";
 import { Box, Image, Link, Ratio, Stack } from "@/components";
-import { useIntl } from "@/hooks";
 
 interface Props {
   dataSetting: DEFAULT_NAME_TYPE;
@@ -43,7 +43,11 @@ export default function FooterSocial({ dataSetting }: Props) {
     if (emails == undefined) return null;
 
     return emails.map((el, idx) => {
-      return <Text key={idx}>{el.value}</Text>;
+      return (
+        <Link key={idx} href={`mailto: ${el.value}`}>
+          <Text>{el.value}</Text>
+        </Link>
+      );
     }, []);
   }, [emails]);
 
@@ -79,7 +83,7 @@ export default function FooterSocial({ dataSetting }: Props) {
 
   return (
     <Wrapper direction="row">
-      <Stack direction="row" spacing={0.5}>
+      <Stack direction="row" spacing={0.5} alignItems="center">
         <Phone />
         <Box>
           <Title>{messages["footer.phoneNumber"]}</Title>
@@ -100,7 +104,7 @@ export default function FooterSocial({ dataSetting }: Props) {
       </Stack>
 
       <Box>
-        <Title>Theo Dõi</Title>
+        <Title>{messages["followUs"]}</Title>
         <Stack direction="row" spacing={2}>
           {renderSocialIcon}
         </Stack>
@@ -134,9 +138,11 @@ const Title = styled(Typography)(({ theme }) => {
 
 const Text = styled(Typography)(({ theme }) => {
   return {
-    ...theme.typography.p_small,
+    ...theme.typography.p_large,
+    color: theme.palette.primary.main,
     textAlign: "left",
-    marginTop: "0.3rem !important",
+    fontWeight: 600,
+    // marginTop: "0.3rem !important",
   };
 });
 

@@ -11,7 +11,7 @@ export default function HomeCategory() {
 
   const render = useMemo(() => {
     if (dataCategory == undefined) return null;
-    const data = dataCategory.filter((el: any) => el.products.length > 0);
+    const data = dataCategory.filter((el: any) => el.on_homepage === true);
 
     return data.map((el, idx) => {
       return (
@@ -38,7 +38,5 @@ export default function HomeCategory() {
 }
 
 const Wrapper = styled(Container)(({ theme }) => {
-  return {
-    padding: "2.5rem 0",
-  };
+  return {};
 });

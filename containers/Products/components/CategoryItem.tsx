@@ -11,19 +11,22 @@ type CategoryItemProps = {
   imageSrc: string;
   alt?: string;
   title: string;
+  id: number;
 };
 
 export default function CategoryItem(props: CategoryItemProps) {
-  const { alt = "", href, imageSrc, title } = props;
+  const { alt = "", href, imageSrc, title, id } = props;
   const router = useRouter();
 
   const onGoToHandler = useCallback(
     (href: string) => () => {
-      router.push(href, href, {
-        scroll: false,
-      });
+      const routerId = router.query.id as string;
+
+      if (parseInt(routerId) === id) return;
+
+      router.push(href);
     },
-    []
+    [router.query.id, id]
   );
 
   return (
@@ -33,7 +36,9 @@ export default function CategoryItem(props: CategoryItemProps) {
         <StyledOverLay />
       </StyledWrapperImg>
 
-      <StyledTitle>{title}</StyledTitle>
+      <StyledTitle isActive={parseInt(router.query.id as string) === id}>
+        {title}
+      </StyledTitle>
     </StyledWrapper>
   );
 }
@@ -70,17 +75,20 @@ const StyledOverLay = styled(Box)(() => {
   };
 });
 
-const StyledTitle = styled(Typography)(({ theme }) => {
+const StyledTitle = styled(Typography, {
+  shouldForwardProp: (propName) => propName !== "isActive",
+})<{ isActive: boolean }>(({ theme, isActive }) => {
   return {
     ...theme.typography.p_medium,
     fontWeight: 600,
     lineHeight: "20px",
-    color: theme.palette.text.primary,
     textTransform: "capitalize",
+    color: isActive ? theme.palette.primary.main : theme.palette.text.primary,
 
     overflow: "hidden",
+    WebkitLineClamp: 2,
+    userSelect: "none",
     display: "-webkit-box",
     WebkitBoxOrient: "vertical",
-    WebkitLineClamp: 2,
   };
 });

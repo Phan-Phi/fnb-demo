@@ -1,71 +1,78 @@
 import { get } from "lodash";
+import { Fragment, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { Container, styled } from "@mui/material";
 
-import { Image, Link, SEO } from "@/components";
-import { useCheckCategory, useSetting } from "@/hooks";
 import { getSeoObject } from "@/libs";
+import { Link, SEO } from "@/components";
 import { IPage, responseSchema } from "@/interfaces";
-import { HOME_PAGE_TYPE_ITEM_TYPE } from "@/__generated__";
+import { HOME_PAGE_TYPE_ITEM_TYPE, PRODUCT_PAGE_TYPE_ITEM_TYPE } from "@/__generated__";
 
 import WhyFNB from "./components/WhyFNB";
 import HomeBanner from "./components/HomeBanner";
 import Header from "@/compositions/Layout/Header";
 import Footer from "@/compositions/Layout/Footer";
 import NewProduct from "./components/NewProduct";
-import OutstandingProducts from "./components/OutstandingProducts";
-import TrendingProducts from "./components/TrendingProducts";
 import HomeCategory from "./components/HomeCategory";
+import TrendingProducts from "./components/TrendingProducts";
+import OutstandingProducts from "./components/OutstandingProducts";
+import HomeAdvertisements from "./components/HomeAdvertisements";
 
-const VideoSection = dynamic(import("../Home/components/VideoSection"), { ssr: false });
-
+const ExportSection = dynamic(import("@/compositions/ExportSection/ExportSection"), {
+  ssr: false,
+});
 export type HomePageProps = IPage<
-  [responseSchema<HOME_PAGE_TYPE_ITEM_TYPE>, responseSchema<any>, responseSchema<any>]
+  [
+    responseSchema<HOME_PAGE_TYPE_ITEM_TYPE>,
+    responseSchema<PRODUCT_PAGE_TYPE_ITEM_TYPE>,
+    responseSchema<any>,
+  ]
 >;
 
 export default function Home(props: HomePageProps) {
-  const setting = useSetting();
-
   const data = get(props, "initData[0].items[0]");
-  const newProduct = get(props, "initData[1].items");
-  const category = get(props, "initData[2].items");
+  const featuredProduct = get(props, "initData[1].items");
 
   const {
     meta,
-    video_cta,
-    video_link,
-    export_cta,
-    export_image,
-    local_cta,
-    local_image,
     banner_title,
     banner,
     banner_link,
+    export_cta,
+    local_cta,
+    local_image,
+    export_image,
+    advertisements,
   } = data;
 
   return (
-    <>
+    <Fragment>
       <StyledContainer>
         <SEO {...getSeoObject(meta)} />
-
         {/* <Header /> */}
 
-        <Link href={banner_link} target="_blank">
-          <HomeBanner img={banner} title={banner_title} isHomePage={true} />
-        </Link>
+        <HomeBanner
+          link={banner_link}
+          img={banner}
+          title={banner_title}
+          isHomePage={true}
+        />
 
         <HomeCategory />
-        <OutstandingProducts />
-        <TrendingProducts />
 
-        <WhyFNB />
+        {featuredProduct && <OutstandingProducts data={featuredProduct[0]} />}
+        {featuredProduct && <TrendingProducts data={featuredProduct[1]} />}
 
-        <NewProduct data={newProduct} />
+        <ExportSection data={{ export_cta, local_cta, local_image, export_image }} />
+        <WhyFNB data={data} />
+
+        <NewProduct />
       </StyledContainer>
-      <VideoSection img="/image/video-section.png" video={video_link} text={video_cta} />
+
+      <HomeAdvertisements data={advertisements} />
 
       {/* <Footer /> */}
-    </>
+    </Fragment>
   );
 }
 

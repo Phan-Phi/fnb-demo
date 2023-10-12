@@ -1,6 +1,6 @@
 import { BoxProps, Container, Typography, styled } from "@mui/material";
 
-import { Box, Ratio, Image } from "@/components";
+import { Box, Ratio, Image, Link } from "@/components";
 import { useMedia } from "@/hooks";
 import { RATIO_HOME_BANNER } from "@/constants";
 
@@ -10,6 +10,7 @@ interface Props {
   subTitle?: string;
   isHomePage?: boolean;
   ratio?: string;
+  link?: any;
 }
 
 interface WrapperBoxProps extends BoxProps {
@@ -17,6 +18,7 @@ interface WrapperBoxProps extends BoxProps {
 }
 
 export default function HomeBanner({
+  link,
   title,
   img,
   isHomePage = false,
@@ -32,33 +34,35 @@ export default function HomeBanner({
     : RATIO_HOME_BANNER.mobile;
 
   return (
-    <StyledContainer>
-      <Ratio ratio={size}>
-        <Overlay className="overlay" />
-        {img && (
-          <Image
-            src={img}
-            alt=""
-            style={{
-              objectFit: "cover",
-              backgroundPosition: "center center",
-              borderRadius: "1rem",
-            }}
-          />
-        )}
+    <StyledLink href={link} target="_blank">
+      <StyledContainer>
+        <Ratio ratio={size}>
+          <Overlay className="overlay" />
+          {img && (
+            <Image
+              src={img}
+              alt=""
+              style={{
+                objectFit: "cover",
+                backgroundPosition: "center center",
+                borderRadius: "1rem",
+              }}
+            />
+          )}
 
-        <Wrapper isHomePage={isHomePage}>
-          <WrapperContent className="wrapperContent">
-            <Title variant="BungeeText">{title}</Title>
-            {/* {isHomePage ? (
+          <Wrapper isHomePage={isHomePage}>
+            <WrapperContent className="wrapperContent">
+              <Title variant="SVNPoppins">{title}</Title>
+              {/* {isHomePage ? (
               <Title variant="BungeeText">{title}</Title>
             ) : (
               <Headlin title={title} subTitle={subTitle} />
             )} */}
-          </WrapperContent>
-        </Wrapper>
-      </Ratio>
-    </StyledContainer>
+            </WrapperContent>
+          </Wrapper>
+        </Ratio>
+      </StyledContainer>
+    </StyledLink>
   );
 }
 
@@ -101,6 +105,10 @@ const Title = styled(Typography)(({ theme }) => {
     width: "100%",
     margin: "0 auto",
     color: theme.palette.common.white,
+    fontWeight: 700,
+    fontSize: "40px",
+    lineHeight: "48px",
+
     [theme.breakpoints.down("md")]: {
       padding: 0,
       textAlign: "center",
@@ -127,5 +135,11 @@ const Overlay = styled(Box)(({ theme }) => {
     background: "rgba(0,0,0,0.4)",
     zIndex: 1,
     borderRadius: "1rem",
+  };
+});
+
+const StyledLink = styled(Link)(({ theme }) => {
+  return {
+    marginBottom: "2.5rem",
   };
 });

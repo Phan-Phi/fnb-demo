@@ -13,7 +13,7 @@ export const URL_DEFAULT_IMAGE = "/image/default.png";
 // Ratio IMG
 export const CATEGORY_IMG_RATIO = "378 / 300";
 export const MAP_RATIO = 576 / 525;
-export const PRODUCT_IMG_RATIO = "239 / 260";
+export const PRODUCT_IMG_RATIO = "240 / 240";
 
 export const HERO_RATIO_DESKTOP = "1200/300";
 export const HERO_RATIO_TABLET = "601/740";

@@ -11,6 +11,8 @@ export interface PRODUCT_CATEGORY_LISTING_PAGE_TYPE_ITEM_TYPE {
   last_published_at: string;
   subtitle: string;
   banner: string | null;
+  detail_banner: null | string;
+  detail_banner_link: string;
 }
 interface ItemMeta {
   type: string;

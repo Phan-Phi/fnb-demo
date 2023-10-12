@@ -22,7 +22,7 @@ export default function CardNew({ data }: Props) {
   const { isSm_Md, isMdDown } = useMedia();
   const [ref, { height }] = useMeasure<HTMLDivElement>();
 
-  const { thumbnail, title, content, description, id, last_published_at } = data;
+  const { thumbnail, title, content, description, id, meta } = data;
 
   const [state, setState] = useState<string>();
   useEffect(() => {
@@ -45,7 +45,11 @@ export default function CardNew({ data }: Props) {
         <Overlay className="overlay"></Overlay>
 
         <WrapperContent ref={ref} className="content">
-          <Content id={id} content={description} last_published_at={last_published_at} />
+          <Content
+            id={id}
+            content={description}
+            last_published_at={meta.first_published_at}
+          />
         </WrapperContent>
 
         <Box sx={{ position: "absolute", bottom: "1rem", padding: "0 1rem" }}>

@@ -1,16 +1,60 @@
-import { Container, Typography } from "@mui/material";
+import { useMemo } from "react";
+import { styled } from "@mui/material";
 
-import WrapperContent from "./WrapperContent";
-import { useIntl } from "@/hooks";
+import ProductSlider from "@/compositions/ProductSlider/ProductSlider";
 
-export default function TrendingProducts() {
-  const { messages } = useIntl();
+import { Box } from "@/components";
+import { useRouter } from "next/router";
+import { useCart, useMedia } from "@/hooks";
+import { PAGE_TYPES } from "@/__generated__";
+
+interface Props {
+  data: any;
+}
+
+export default function TrendingProducts({ data }: Props) {
+  const { title, id } = data;
+
+  const { locale } = useRouter();
+  const { isMdDown } = useMedia();
+  const { isExported } = useCart();
+
+  const render = useMemo(() => {
+    return (
+      <ProductSlider
+        title={title}
+        option={{
+          limit: isMdDown ? 6 : 10,
+          offset: 0,
+          fields: "*",
+          locale: locale,
+          type: PAGE_TYPES.PRODUCT_PRODUCTPAGE,
+          is_exported: isExported ? true : "false",
+          descendant_of: id,
+        }}
+      />
+    );
+  }, [isMdDown, isExported, title]);
 
   return (
-    <Container>
-      <WrapperContent title={messages["home.trendingProducts"]}>
-        <Typography>asdasd</Typography>
-      </WrapperContent>
-    </Container>
+    <Wrapper>
+      {render}
+      {/* <ProductSlider
+        title={title}
+        option={{
+          limit: 10,
+          offset: 0,
+          fields: "*",
+          locale: locale,
+          type: PAGE_TYPES.PRODUCT_PRODUCTPAGE,
+          is_exported: isExported ? true : "false",
+          descendant_of: id,
+        }}
+      /> */}
+    </Wrapper>
   );
 }
+
+const Wrapper = styled(Box)(() => {
+  return {};
+});

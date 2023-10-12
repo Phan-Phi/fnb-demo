@@ -12,18 +12,26 @@ export interface HOME_PAGE_TYPE_ITEM_TYPE {
   banner: string;
   banner_link: string;
   banner_title: string;
-  about_us_content: string;
-  about_us_images: AboutUsImage[];
-  video_link: string;
-  video_cta: string;
+  advertisements: Advertisement[];
   local_image: string;
   local_cta: string;
   export_image: string;
   export_cta: string;
+  unique_selling_point_title: string;
+  unique_selling_point_subtitle: string;
+  unique_selling_point_images: UniqueSellingPointImage[];
 }
-interface AboutUsImage {
+interface Advertisement {
   block_type: string;
-  value: string;
+  value: AdvertisementValue;
+}
+interface AdvertisementValue {
+  video_link?: string;
+  video_cta?: string;
+  video_background?: string;
+  banner?: string;
+  banner_cta?: string;
+  banner_link?: string;
 }
 interface ItemMeta {
   type: string;
@@ -39,6 +47,15 @@ interface ItemMeta {
   locale: string;
   canonical_url: string;
   og_image: string | null;
+}
+interface UniqueSellingPointImage {
+  block_type: string;
+  value: UniqueSellingPointImageValue;
+}
+interface UniqueSellingPointImageValue {
+  title: string;
+  subtitle: string;
+  image: string;
 }
 interface TopLevelMeta {
   total_count: number;

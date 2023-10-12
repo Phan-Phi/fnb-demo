@@ -1,7 +1,7 @@
-import { Box, Image, Link } from "@/components";
-import { useSetting } from "@/hooks";
 import { styled } from "@mui/material";
-import React from "react";
+
+import { useSetting } from "@/hooks";
+import { Box, Image, Link } from "@/components";
 
 export default function LogoHeader() {
   const setting = useSetting();
@@ -11,7 +11,7 @@ export default function LogoHeader() {
   return (
     <Link href="/">
       <StyledBox>
-        <Image src={"/image/logoFNB.png"} alt="logo" />
+        <Image src={logo} alt="logo" />
       </StyledBox>
     </Link>
   );
@@ -20,12 +20,16 @@ export default function LogoHeader() {
 const StyledBox = styled(Box)(({ theme }) => {
   return {
     position: "relative",
-    width: "80px",
-    height: "50px",
+    width: "100px",
+    height: "70px",
+
+    "& img": {
+      objectFit: "cover",
+    },
 
     [theme.breakpoints.down("md")]: {
-      width: "42px",
-      height: "42px",
+      width: "55px",
+      height: "50px",
     },
   };
 });

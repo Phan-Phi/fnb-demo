@@ -1,16 +1,24 @@
 import { get, isEmpty } from "lodash";
-import { useRouter } from "next/router";
-import { Container, Grid, Tab, Typography, styled } from "@mui/material";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 
+import {
+  Banner,
+  Box,
+  LoadingProducts,
+  Pagination,
+  SEO,
+  TabPanel,
+  Tabs,
+} from "@/components";
 import { PAGES_API } from "@/apis";
+import { useRouter } from "next/router";
 import { CardNew } from "@/compositions";
 import { getSeoObject, transformUrl } from "@/libs";
 import { IPage, responseSchema } from "@/interfaces";
 import { PAGE_TYPES } from "@/__generated__/END_POINT";
 import { useFetch, useIntl, useMedia, useParams } from "@/hooks";
-import { Box, LoadingProducts, Pagination, SEO, TabPanel, Tabs } from "@/components";
-import Footer from "@/compositions/Layout/Footer";
+import { NEWS_CATEGORY_LISTING_PAGE_TYPE_ITEM_TYPE } from "@/__generated__";
+import { Container, Grid, Grow, Tab, Typography, styled } from "@mui/material";
 
 const customTab = {
   id: -1,
@@ -19,11 +27,14 @@ const customTab = {
 };
 
 export type NewsPageProps = IPage<
-  [responseSchema<any>, responseSchema<any>, responseSchema<any>]
+  [
+    responseSchema<NEWS_CATEGORY_LISTING_PAGE_TYPE_ITEM_TYPE>,
+    responseSchema<NEWS_CATEGORY_LISTING_PAGE_TYPE_ITEM_TYPE[]>,
+  ]
 >;
 
 export default function News(props: NewsPageProps) {
-  const { locale, query } = useRouter();
+  const { locale } = useRouter();
   const { messages } = useIntl();
   const { isMdDown } = useMedia();
 
@@ -32,8 +43,7 @@ export default function News(props: NewsPageProps) {
   const [currentTab, setCurrentTab] = useState<number>(-1);
 
   const dataListing = get(props, "initData[0].items[0]");
-  const dataItem = get(props, "initData[1].items");
-  const dataCategory = get(props, "initData[2].items");
+  const dataCategory = get(props, "initData[1].items");
 
   const { params, setParams } = useParams({
     initState: {
@@ -108,7 +118,7 @@ export default function News(props: NewsPageProps) {
     [currentPage, params]
   );
 
-  const renderTabProduct = useMemo(() => {
+  const renderTabNews = useMemo(() => {
     if (dataCategory === undefined) return;
 
     const mergeTabList = [customTab, ...dataCategory];
@@ -133,10 +143,10 @@ export default function News(props: NewsPageProps) {
 
   const renderCardItem = useMemo(() => {
     const LoadingComponent = (
-      <>
+      <WrapperSkeleton>
         <LoadingProducts />
         <LoadingProducts />
-      </>
+      </WrapperSkeleton>
     );
 
     let content: React.ReactNode = null;
@@ -146,7 +156,7 @@ export default function News(props: NewsPageProps) {
     } else if (isEmpty(data) && !isLoading) {
       content = (
         <Grid item xs={12}>
-          {/* <Typography textAlign="center">{messages["noProduct"] as string}</Typography> */}
+          <Typography textAlign="center">{messages["news.noNewsFound"]}</Typography>
         </Grid>
       );
     } else {
@@ -155,10 +165,14 @@ export default function News(props: NewsPageProps) {
       } else {
         content = (
           <Fragment>
-            {data.map((item: any) => {
+            {data.map((item: any, idx) => {
               return (
-                <Grid item xs={12} sm={12} md={4} key={item.id}>
-                  <CardNew data={item} />
+                <Grid item xs={12} sm={6} md={4} key={idx}>
+                  <Grow in={true} timeout={idx * 70 + 600}>
+                    <Box>
+                      <CardNew data={item} />
+                    </Box>
+                  </Grow>
                 </Grid>
               );
             })}
@@ -179,9 +193,12 @@ export default function News(props: NewsPageProps) {
   return (
     <Container>
       <SEO {...getSeoObject(meta)} />
-      <Title>{messages["news.news&event"]}</Title>
 
-      {renderTabProduct}
+      <Banner imgSrc={dataListing.banner} title={dataListing.subtitle} />
+
+      <Title>{title}</Title>
+
+      {renderTabNews}
 
       <Wrapper>{renderCardItem}</Wrapper>
 
@@ -198,11 +215,17 @@ const Wrapper = styled(Box)(() => {
   };
 });
 
+const WrapperSkeleton = styled(Box)(() => {
+  return {
+    padding: "1rem 0",
+  };
+});
+
 const Title = styled(Typography)(({ theme }) => {
   return {
     ...theme.typography.SVNPoppins,
     fontSize: "24px",
     fontWeight: 700,
-    marginBottom: "1.25rem",
+    margin: "1.25rem 0",
   };
 });

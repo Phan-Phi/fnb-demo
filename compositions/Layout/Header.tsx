@@ -3,9 +3,10 @@ import { styled } from "@mui/material";
 import { useCallback, useState } from "react";
 
 import { Box } from "@/components";
+import { useRouter } from "next/router";
+
 import DesktopHeader from "./components/DesktopHeader";
 // import AppBarHeader from "./components/AppBarHeader";
-import { useRouter } from "next/router";
 
 interface WrapperProps {
   scroll: boolean;
@@ -46,12 +47,12 @@ const Wrapper = styled(Box, {
     padding: "1rem 0 0 0",
     transition: "1s ease",
     transform: "translateX(-50%)",
-    backdropFilter: scroll ? "blur(5px)" : "blur(0)",
+    // backdropFilter: scroll ? "blur(5px)" : "blur(0)",
     boxShadow: scroll ? "rgba(0, 0, 0, 0.24) 0px 3px 8px" : "none",
 
     ...(theme.palette.mode === "dark" && {
       background: scroll
-        ? "rgba(21, 22, 25, 0.8)"
+        ? "rgba(21, 22, 25, 1)"
         : asPath !== "/"
         ? ""
         : theme.palette.background.default,
@@ -59,7 +60,7 @@ const Wrapper = styled(Box, {
 
     ...(theme.palette.mode === "light" && {
       background: scroll
-        ? "rgba(255, 255, 255, 0.8)"
+        ? "rgba(255, 255, 255, 1)"
         : asPath !== "/"
         ? ""
         : theme.palette.background.default,

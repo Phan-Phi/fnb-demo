@@ -22,6 +22,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         locale,
         type: PAGE_TYPES["PRODUCT_PRODUCTCATEGORYLISTINGPAGE"],
       }),
+      transformUrl(PAGES_END_POINT, {
+        type: PAGE_TYPES["HOME_HOMEPAGE"],
+        fields: "*",
+        locale,
+      }),
     ];
 
     const { fallback, resList } = await prefetchData(urls, { locale });

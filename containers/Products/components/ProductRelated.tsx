@@ -2,11 +2,12 @@ import React, { useMemo } from "react";
 import { useRouter } from "next/router";
 
 import { isEmpty } from "lodash";
-import { Box, Grid, Grow, Stack, styled } from "@mui/material";
+import { Box, Grid, Grow, styled } from "@mui/material";
 
 import { CardProductItem } from "@/compositions";
 import { LoadingProducts, NoProducts, Spacing, Title, Pagination } from "@/components";
 
+import { useIntl } from "@/hooks";
 import { PRODUCT_PAGE_TYPE_ITEM_TYPE } from "@/__generated__";
 
 type ProductRelatedProps = {
@@ -14,12 +15,12 @@ type ProductRelatedProps = {
   handlePagination: any;
   isLoading: boolean;
   totalPage: number;
-  isAnimation: boolean;
 };
 
 export default function ProductRelated(props: ProductRelatedProps) {
   const router = useRouter();
-  const { data, handlePagination, isAnimation, isLoading, totalPage } = props;
+  const { messages } = useIntl();
+  const { data, handlePagination, isLoading, totalPage } = props;
 
   const filteredData = useMemo(() => {
     if (data == undefined) return [];
@@ -49,7 +50,7 @@ export default function ProductRelated(props: ProductRelatedProps) {
             {filteredData.map((item, index) => {
               return (
                 <Grid item xs={2.4} key={index}>
-                  <Grow in={isAnimation} timeout={index * 70 + 600}>
+                  <Grow in={true} timeout={index * 70 + 600}>
                     <Box>
                       <CardProductItem
                         isHomePage={true}
@@ -71,11 +72,11 @@ export default function ProductRelated(props: ProductRelatedProps) {
     }
 
     return content;
-  }, [filteredData, isLoading, isAnimation]);
+  }, [filteredData, isLoading]);
 
   return (
     <StyledWrapper isDataEmpty={isEmpty(filteredData)} isLoading={!isLoading}>
-      <Title>Sản phẩm cùng danh mục</Title>
+      <Title>{messages["brandsRelated.bannerSubTitle"]}</Title>
 
       <Spacing spacing={3} />
 

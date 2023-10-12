@@ -4,50 +4,46 @@ import { Container, Typography, styled } from "@mui/material";
 import { Box, Image, ImageRatio, Stack } from "@/components";
 
 import WrapperContent from "./WrapperContent";
+import { HOME_PAGE_TYPE_ITEM_TYPE } from "@/__generated__";
 
-export default function WhyFNB() {
-  const renderItem = useMemo(() => {}, []);
+interface Props {
+  // data: HOME_PAGE_TYPE_ITEM_TYPE[];
+  data: any;
+}
+
+export default function WhyFNB({ data }: Props) {
+  const {
+    unique_selling_point_title,
+    unique_selling_point_subtitle,
+    unique_selling_point_images,
+  } = data;
+
+  const renderItem = useMemo(() => {
+    return unique_selling_point_images.map((el: any, idx: number) => {
+      const { value } = el;
+
+      return (
+        <WrapperItem key={idx}>
+          <Box position="relative" width={120} height={120}>
+            <Image src={value.image} alt="" />
+          </Box>
+          <TitleItem variant="Inter_medium">{value.title}</TitleItem>
+          <TextItem>{value.subtitle}</TextItem>
+        </WrapperItem>
+      );
+    });
+  }, [unique_selling_point_images]);
 
   return (
     <Container>
       <WrapperContent title="">
         <WrapperText>
-          <Title variant="SVNPoppins">Tại sao chọn FNB?</Title>
-          <Text variant="p_large">
-            Luxury goods straight from the same manufacturers as your favorite brands.
-          </Text>
+          <Title variant="SVNPoppins">{unique_selling_point_title}</Title>
+          <Text variant="p_large">{unique_selling_point_subtitle}</Text>
         </WrapperText>
 
-        <Stack direction="row" spacing="6rem">
-          <WrapperItem>
-            <Box position="relative" width={120} height={120}>
-              <Image src="/image/cube.png" alt="" />
-            </Box>
-            <TitleItem variant="Inter_medium">Lorem Ipsum</TitleItem>
-            <TextItem>
-              It is a long established fact that a reader will be distracted.
-            </TextItem>
-          </WrapperItem>
-
-          <WrapperItem>
-            <Box position="relative" width={120} height={120}>
-              <Image src="/image/cube.png" alt="" />
-            </Box>
-            <TitleItem variant="Inter_medium">Lorem Ipsum</TitleItem>
-            <TextItem>
-              It is a long established fact that a reader will be distracted.
-            </TextItem>
-          </WrapperItem>
-
-          <WrapperItem>
-            <Box position="relative" width={120} height={120}>
-              <Image src="/image/cube.png" alt="" />
-            </Box>
-            <TitleItem variant="Inter_medium">Lorem Ipsum</TitleItem>
-            <TextItem>
-              It is a long established fact that a reader will be distracted.
-            </TextItem>
-          </WrapperItem>
+        <Stack direction="row" spacing="6rem" justifyContent="center">
+          {renderItem}
         </Stack>
       </WrapperContent>
     </Container>

@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+import { useRouter } from "next/router";
 import { Box, Typography, styled } from "@mui/material";
 
 import Image from "../Image";
@@ -12,11 +14,13 @@ import {
 } from "@/constants";
 
 type BannerProps = {
-  imgSrc: string;
+  imgSrc: string | null | undefined;
   title?: string;
+  href?: string;
 };
 
-export default function Banner({ imgSrc, title }: BannerProps) {
+export default function Banner({ imgSrc, title, href }: BannerProps) {
+  const router = useRouter();
   const { isMdDown, isMdUp } = useMedia();
 
   const size = isMdUp
@@ -25,27 +29,43 @@ export default function Banner({ imgSrc, title }: BannerProps) {
     ? HERO_RATIO_TABLET
     : HERO_RATIO_MOBILE;
 
+  const onGoToHandler = useCallback(
+    (href: string) => () => {
+      if (href == undefined || href == "") return;
+
+      router.push(href);
+    },
+    []
+  );
+
   return (
-    <StyledWrapper>
-      <Ratio ratio={size}>
-        <StyledOverLay className="overlay" />
+    <StyledWrapper onClick={onGoToHandler(href as string)} href={href as string}>
+      {imgSrc && (
+        <Ratio ratio={size}>
+          <StyledOverLay className="overlay" />
 
-        <Image
-          alt=""
-          src={imgSrc}
-          style={{ objectFit: "cover", backgroundPosition: "center center" }}
-        />
+          <Image
+            alt=""
+            src={imgSrc}
+            style={{ objectFit: "cover", backgroundPosition: "center center" }}
+          />
 
-        {title && <StyledTitle>{title}</StyledTitle>}
-      </Ratio>
+          {title && <StyledTitle>{title}</StyledTitle>}
+        </Ratio>
+      )}
     </StyledWrapper>
   );
 }
 
-const StyledWrapper = styled(Box)(() => {
+const StyledWrapper = styled(Box, {
+  shouldForwardProp: (propName) => propName !== "href",
+})<{ href: string }>(({ href }) => {
   return {
     borderRadius: 16,
     overflow: "hidden",
+    ...(href && {
+      cursor: "pointer",
+    }),
   };
 });
 

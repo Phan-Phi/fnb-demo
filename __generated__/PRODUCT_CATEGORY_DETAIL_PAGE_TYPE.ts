@@ -10,6 +10,8 @@ export interface PRODUCT_CATEGORY_DETAIL_PAGE_TYPE_ITEM_TYPE {
   title: string;
   last_published_at: string;
   banner: null | string;
+  featured: boolean;
+  on_homepage: boolean;
 }
 interface ItemMeta {
   type: Type;
@@ -30,7 +32,7 @@ type Locale = "vi" | "en";
 interface Parent {
   id: number;
   meta: ParentMeta;
-  title: Title;
+  title: string;
 }
 interface ParentMeta {
   type: Type;
@@ -38,7 +40,6 @@ interface ParentMeta {
   html_url: string | null;
 }
 type Type = "product.ProductCategoryDetailPage" | "product.ProductCategoryListingPage";
-type Title = "Sản phẩm" | "VINAMILK" | "COCACOLA" | "CHOLIMEX" | "TƯƠNG" | "Products";
 interface TopLevelMeta {
   total_count: number;
 }

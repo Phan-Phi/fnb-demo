@@ -18,10 +18,10 @@ import {
 
 type CartItemProps = {
   id: number;
+  price: string;
   variantId: number;
   variantName: string;
   productName: string;
-  price: string;
   quantityOfProduct: number;
   onDeleteItem: () => void;
   mutate: KeyedMutator<CART_ITEMS_EXTENDS>;
@@ -30,13 +30,13 @@ type CartItemProps = {
 export default function CartItem(props: CartItemProps) {
   const {
     id,
+    price,
+    mutate,
     variantId,
     variantName,
     productName,
-    price,
-    quantityOfProduct,
     onDeleteItem,
-    mutate,
+    quantityOfProduct,
   } = props;
 
   const { cartKey } = useCart();
@@ -315,6 +315,10 @@ const StyledWrapperPrice = styled(Stack)(({ theme }) => {
   return {
     width: 180,
 
+    [theme.breakpoints.up("md")]: {
+      alignItems: "flex-end",
+    },
+
     [theme.breakpoints.down("md")]: {
       width: 120,
     },
@@ -328,6 +332,10 @@ const StyledWrapperPrice = styled(Stack)(({ theme }) => {
 const StyledWrapperTotalPrice = styled(Stack)(({ theme }) => {
   return {
     width: 250,
+
+    [theme.breakpoints.up("md")]: {
+      alignItems: "flex-end",
+    },
 
     [theme.breakpoints.down("md")]: {
       width: 200,

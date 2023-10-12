@@ -15,7 +15,7 @@ import {
 } from "@/components";
 
 import { getSeoObject, transformUrl } from "@/libs";
-import { useCart, useFetch, useParams } from "@/hooks";
+import { useCart, useFetch, useIntl, useParams } from "@/hooks";
 
 import {
   PAGE_TYPES,
@@ -32,11 +32,11 @@ export default function Search(props: SearchProps) {
   const meta = get(props, "initData[0].items[0].meta");
 
   const router = useRouter();
+  const { messages } = useIntl();
   const { isExported } = useCart();
 
   const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isAnimation, setIsAnimation] = useState(true);
 
   const { params, setParams } = useParams({
     initState: {
@@ -122,7 +122,7 @@ export default function Search(props: SearchProps) {
             {data.map((item, index) => {
               return (
                 <Grid item xs={3} key={index}>
-                  <Grow in={isAnimation} timeout={index * 70 + 600}>
+                  <Grow in={true} timeout={index * 70 + 600}>
                     <Box>
                       <CardProductItem
                         title={item.title}
@@ -143,7 +143,7 @@ export default function Search(props: SearchProps) {
     }
 
     return content;
-  }, [data, isLoading, isAnimation]);
+  }, [data, isLoading]);
 
   const handlePagination = useCallback(
     (event: React.SyntheticEvent, page: number) => {
@@ -154,8 +154,6 @@ export default function Search(props: SearchProps) {
       setParams({
         offset: (page - 1) * params.limit,
       });
-
-      setIsAnimation((prev) => !!prev);
     },
     [params, currentPage]
   );
@@ -163,7 +161,7 @@ export default function Search(props: SearchProps) {
   return (
     <Container>
       <SEO {...getSeoObject(meta)} />
-      <Title>{`Tìm kiếm: "${router.query.search}"`}</Title>
+      <Title>{`${messages["search"]}: "${router.query.search}"`}</Title>
 
       <Spacing spacing={2} />
 

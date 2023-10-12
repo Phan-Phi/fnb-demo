@@ -82,7 +82,7 @@ const StyledStack = styled(Stack)(() => {
 const StyledWrapperQuantity = styled(Box)(({ theme }) => {
   return {
     top: -6,
-    right: -8,
+    right: -4,
     position: "absolute",
 
     width: 18,

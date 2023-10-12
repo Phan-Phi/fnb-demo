@@ -9,7 +9,7 @@ export interface DEFAULT_NAME_TYPE {
   contact_icon: ContactIcon[];
   working_times: Email[];
   working_times_en: Email[];
-  hotlines: any[];
+  hotlines: Email[];
   seo_title: string;
   seo_title_en: string;
   seo_description: string;
@@ -22,7 +22,9 @@ export interface DEFAULT_NAME_TYPE {
   address_en: string;
   footer_description: string;
   footer_description_en: string;
+  ministry_link: string;
   site: number;
+  ministry_logo: number;
 }
 interface ContactIcon {
   block_type: string;

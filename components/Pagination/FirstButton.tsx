@@ -14,5 +14,8 @@ const StyledWrapper = styled(Box)(() => {
   return {
     width: "fit-content",
     height: "fit-content",
+    "& .svg": {
+      height: 22,
+    },
   };
 });

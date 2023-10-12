@@ -1,10 +1,10 @@
 import { Home } from "@/containers";
 import { transformUrl } from "@/libs";
-import { PAGES_API } from "@/apis";
-import prefetchData from "@/libs/prefetchData";
 import { GetStaticPropsContext } from "next";
 import { HomePageProps } from "@/containers/Home/Home";
 import { PAGES_END_POINT, PAGE_TYPES } from "@/__generated__/END_POINT";
+
+import prefetchData from "@/libs/prefetchData";
 
 export default function HomePage(props: HomePageProps) {
   return <Home {...props} />;
@@ -22,16 +22,10 @@ export async function getStaticProps(context: GetStaticPropsContext) {
       }),
 
       transformUrl(PAGES_END_POINT, {
-        type: PAGE_TYPES.PRODUCT_PRODUCTPAGE,
-        fields: "*",
-        order: "-first_variant_price",
-        limit: 10,
-        locale,
-      }),
-
-      transformUrl(PAGES_END_POINT, {
         type: PAGE_TYPES.PRODUCT_PRODUCTCATEGORYDETAILPAGE,
         fields: "*",
+        limit: 10,
+        featured: true,
         locale,
       }),
     ];

@@ -2,9 +2,9 @@ import React, { useCallback } from "react";
 import { useRouter } from "next/router";
 import { Stack, Typography, styled } from "@mui/material";
 
-import { ImageRatio, VNDCurrency } from "@/components";
-import { PRODUCT_IMG_RATIO } from "@/constants";
 import { ROUTES } from "@/routes";
+import { PRODUCT_IMG_RATIO } from "@/constants";
+import { ImageRatio, VNDCurrency } from "@/components";
 
 type CardProductItemProps = {
   alt?: string;
@@ -36,7 +36,7 @@ export default function CardProductItem(props: CardProductItemProps) {
         imageProps={{
           alt: alt,
           src: imageSrc,
-          style: { borderRadius: isHomePage ? 20 : 0 },
+          style: { borderRadius: isHomePage ? 20 : 20 },
         }}
       />
 
@@ -49,7 +49,7 @@ export default function CardProductItem(props: CardProductItemProps) {
 
 const StyledWrapper = styled(Stack)(() => {
   return {
-    gap: 4,
+    gap: 8,
     cursor: "pointer",
   };
 });

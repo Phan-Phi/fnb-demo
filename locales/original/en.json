@@ -1,12 +1,16 @@
 {
   "product": "Product",
+  "product.empty": "Your categories is empty",
   "categories": "Categories",
+  "search": "Search",
+  "searchProduct": "Search product...",
+  "followUs": "Follow Us",
 
   "header.contact": "Contact",
   "header.home": "Home",
   "header.about": "About",
-  "header.news": "News",
-  "header.product": "Brands",
+  "header.news": "Blog",
+  "header.category": "Products",
   "header.languages": "Languages",
 
   "404message": "An error occurred, please try again later!",
@@ -108,6 +112,7 @@
   "news.related.bannerSubTitle": "From the same category",
   "news.viewMore": "View More",
   "news.news&event": "News & Event",
+  "news.noNewsFound": "No News Found",
 
   "pagination.previous": "Previous",
   "pagination.next": "Next",

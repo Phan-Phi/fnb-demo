@@ -1,7 +1,7 @@
+import { useRouter } from "next/router";
 import { Container, Typography, styled } from "@mui/material";
 
 import { useSetting } from "@/hooks";
-import { useRouter } from "next/router";
 import { Box, Divider, Link } from "@/components";
 
 import FooterContent from "./components/FooterContent";

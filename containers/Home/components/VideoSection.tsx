@@ -21,11 +21,8 @@ interface PropsVideo {
 }
 
 export default function VideoSection({ img, text, video }: Props) {
-  const youtubeThumbnail = require("youtube-thumbnail");
   const [open, setOpen] = useState(false);
-
   const [detectBrowser, setDetectBrowser] = useState<boolean>(false);
-  const thumbnail = youtubeThumbnail(video);
 
   useEffect(() => {
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -40,7 +37,7 @@ export default function VideoSection({ img, text, video }: Props) {
   }, []);
 
   return (
-    <Wrapper src={thumbnail ? thumbnail.high.url : ""} _detectBrowser={detectBrowser}>
+    <Wrapper src={img} _detectBrowser={detectBrowser}>
       <Overlay className="overlay" />
 
       <Content>
@@ -89,6 +86,7 @@ const Wrapper = styled(Box, {
     backgroundPosition: "center",
     zIndex: 1,
 
+    marginBottom: "1rem",
     [theme.breakpoints.down("sm")]: {
       marginBottom: "2.5rem",
     },
@@ -191,9 +189,9 @@ const Text = styled(Typography)(({ theme }) => {
   };
 });
 
-const Video = ({ video }: PropsVideo) => {
-  const youtubeThumbnail = require("youtube-thumbnail");
-  const thumbnail = youtubeThumbnail(video);
+// const Video = ({ video }: PropsVideo) => {
+//   const youtubeThumbnail = require("youtube-thumbnail");
+//   const thumbnail = youtubeThumbnail(video);
 
-  return <Image src={thumbnail.high.url} alt="" style={{ borderRadius: "5px" }} />;
-};
+//   return <Image src={thumbnail.high.url} alt="" style={{ borderRadius: "5px" }} />;
+// };

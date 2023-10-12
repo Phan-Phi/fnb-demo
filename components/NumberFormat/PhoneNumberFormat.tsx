@@ -26,8 +26,7 @@ export default function PhoneNumberFormat(props: PhoneNumberFormatProps) {
 
 const StyledNumberFormat = styled(OriginalNumberFormat)(({ theme }) => {
   return {
-    ...theme.typography.p_large,
-    fontWeight: 600,
+    ...theme.typography.p_medium,
     color: theme.palette.text.primary,
   };
 });

@@ -4,7 +4,7 @@ import { get, isEmpty } from "lodash";
 import { Box, Container, Grid, Grow } from "@mui/material";
 
 import { CardCategoryItem } from "@/compositions";
-import { LoadingCategories, SEO, Spacing, Title } from "@/components";
+import { Banner, LoadingCategories, SEO, Spacing, Title } from "@/components";
 
 import { IPage } from "@/interfaces";
 import { getSeoObject } from "@/libs";
@@ -16,9 +16,11 @@ export type CategoryListProps = IPage<[PRODUCT_CATEGORY_LISTING_PAGE_TYPE]>;
 
 export default function CategoryList(props: CategoryListProps) {
   const dataListing = get(props, "initData[0].items");
-  const meta = get(dataListing, "[0].meta");
 
+  const meta = get(dataListing, "[0].meta");
   const title = get(dataListing, "[0].title");
+  const banner = get(dataListing, "[0].banner");
+  const subTitle = get(dataListing, "[0].subtitle");
 
   const { data: dataCategory, isLoading } = useCheckCategory();
 
@@ -70,6 +72,10 @@ export default function CategoryList(props: CategoryListProps) {
   return (
     <Container>
       <SEO {...getSeoObject(meta)} />
+
+      <Banner imgSrc={banner} title={subTitle} />
+
+      <Spacing spacing={2.5} />
 
       <Grid container rowSpacing="20px" columnSpacing="16px">
         <Grid item xs={12}>
